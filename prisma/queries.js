@@ -1,5 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+require("dotenv").config();
+const bcrypt = require("bcryptjs");
 
 const allposts = async () => {
 	try {
@@ -49,8 +51,24 @@ async function createPost(title, content, published, authorId) {
 	}
 }
 
+async function loginUser(email, password) {
+	console.log(email, password);
+	try {
+		const user = await prisma.user.findUnique({
+			where: { email },
+		});
+		return user;
+	} catch (error) {
+		return {
+			message: "An error occured. Unable to login",
+			error: error.message,
+		};
+	}
+}
+
 module.exports = {
 	allposts,
 	createPost,
 	createUser,
+	loginUser,
 };

@@ -1,5 +1,6 @@
 const db = require("../prisma/queries");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 createUser = async (req, res) => {
 	const { username, email, password, role } = req.body;
@@ -15,6 +16,38 @@ createUser = async (req, res) => {
 	}
 };
 
+loginUser = async (req, res) => {
+	const { email, password } = req.body;
+	try {
+		const user = await db.loginUser(email, password);
+		if (!user) {
+			return res.status(400).json({ message: "invalid login details" });
+		}
+		// const isMatch = await bcrypt.compare(password, user.password);
+		// if (!isMatch) {
+		// 	return res.status(400).json({ messahe: "Invalid details" });
+		// }
+		const token = jwt.sign(
+			{
+				userId: user.id,
+				username: user.username,
+				role: user.role,
+			},
+			process.env.jwtSecret,
+			{
+				expiresIn: "1h",
+			},
+		);
+		return res.json({ token });
+	} catch (error) {
+		res.status(500).json({
+			message: "Something went wrong checking details",
+			error: error.message,
+		});
+	}
+};
+
 module.exports = {
 	createUser,
+	loginUser,
 };
