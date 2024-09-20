@@ -6,6 +6,7 @@ const passport = require("passport");
 require("../Passport/passport");
 
 postRouter.get("/", postController.getAllPosts);
+postRouter.get("/post/:id", postController.getSinglePost);
 postRouter.post(
 	"/createpost",
 	passport.authenticate("jwt", { session: false }),

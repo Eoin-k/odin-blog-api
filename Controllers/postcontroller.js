@@ -23,7 +23,19 @@ createPost = async (req, res) => {
 	}
 };
 
+getSinglePost = async (req, res) => {
+	const id = Number(req.params.id);
+	try {
+		const post = await db.getSinglePost(id);
+		res.status(200).json(post);
+		console.log(post);
+	} catch (error) {
+		console.error(error);
+	}
+};
+
 module.exports = {
 	getAllPosts,
 	createPost,
+	getSinglePost,
 };

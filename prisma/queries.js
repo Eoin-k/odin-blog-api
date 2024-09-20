@@ -13,6 +13,22 @@ const allposts = async () => {
 	}
 };
 
+async function getSinglePost(id) {
+	try {
+		const post = await prisma.post.findMany({
+			where: {
+				id: id,
+			},
+			include: {
+				comments: true,
+			},
+		});
+		return post;
+	} catch (error) {
+		return error;
+	}
+}
+
 async function createUser(username, email, password, role) {
 	try {
 		const newUser = await prisma.user.create({
@@ -92,4 +108,5 @@ module.exports = {
 	createUser,
 	loginUser,
 	createComment,
+	getSinglePost,
 };
