@@ -11,5 +11,10 @@ postRouter.post(
 	passport.authenticate("jwt", { session: false }),
 	postController.createPost,
 );
+postRouter.post(
+	"/post/:id/comments",
+	passport.authenticate("jwt", { session: false }),
+	commentController.createComment,
+);
 
 module.exports = postRouter;

@@ -1,7 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 require("dotenv").config();
-const bcrypt = require("bcryptjs");
 
 const allposts = async () => {
 	try {
@@ -69,9 +68,28 @@ async function loginUser(email, password) {
 	}
 }
 
+async function createComment(content, authorId, id) {
+	try {
+		const newComment = await prisma.comment.create({
+			data: {
+				content,
+				authorId,
+				postId: id,
+			},
+		});
+		return newComment;
+	} catch (error) {
+		return {
+			message: "error creating comment",
+			error: error.message,
+		};
+	}
+}
+
 module.exports = {
 	allposts,
 	createPost,
 	createUser,
 	loginUser,
+	createComment,
 };
