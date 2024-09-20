@@ -10,12 +10,12 @@ getAllPosts = async (req, res) => {
 };
 
 createPost = async (req, res) => {
-	const { title, content, published } = req.body;
-	const authorId = user.id;
-	console.log(authorId);
+	const { title, content, published, authorId } = req.body;
+	console.log(title, content, published);
 	try {
 		const newPost = await db.createPost(title, content, published, authorId);
 		res.status(201).json(newPost);
+		console.log("Post Created");
 	} catch (error) {
 		res
 			.status(500)

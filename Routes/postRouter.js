@@ -2,13 +2,13 @@ const { Router } = require("express");
 const postController = require("../Controllers/postcontroller");
 const commentController = require("../Controllers/commentController");
 const postRouter = Router();
-const authmiddleware = require("../Middleware/auth");
+const passport = require("passport");
+require("../Passport/passport");
 
 postRouter.get("/", postController.getAllPosts);
 postRouter.post(
 	"/createpost",
-	authmiddleware.authenticateUser,
-	authmiddleware.authorise("ADMIN"),
+	passport.authenticate("jwt", { session: false }),
 	postController.createPost,
 );
 

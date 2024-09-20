@@ -7,7 +7,7 @@ const jwtSecret = process.env.jwtSecret;
 
 const options = {
 	secretOrKey: jwtSecret,
-	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken,
+	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken("jwt"),
 };
 
 passport.use(
@@ -26,5 +26,3 @@ passport.use(
 		}
 	}),
 );
-
-module;

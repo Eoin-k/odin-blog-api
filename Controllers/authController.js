@@ -20,25 +20,27 @@ loginUser = async (req, res) => {
 	const { email, password } = req.body;
 	try {
 		const user = await db.loginUser(email, password);
-		if (!user) {
+		if (!user.username) {
 			return res.status(400).json({ message: "invalid login details" });
-		}
-		// const isMatch = await bcrypt.compare(password, user.password);
-		// if (!isMatch) {
-		// 	return res.status(400).json({ messahe: "Invalid details" });
-		// }
-		const token = jwt.sign(
-			{
-				userId: user.id,
-				username: user.username,
+		} else {
+			const token = jwt.sign(
+				{
+					userId: user.id,
+					username: user.username,
+					role: user.role,
+				},
+				process.env.jwtSecret,
+				{
+					expiresIn: "1h",
+				},
+			);
+			return res.json({
+				token: "Bearer " + token,
+				user: user.username,
 				role: user.role,
-			},
-			process.env.jwtSecret,
-			{
-				expiresIn: "1h",
-			},
-		);
-		return res.json({ token });
+				id: user.id,
+			});
+		}
 	} catch (error) {
 		res.status(500).json({
 			message: "Something went wrong checking details",

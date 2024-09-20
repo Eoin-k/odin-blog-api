@@ -52,12 +52,15 @@ async function createPost(title, content, published, authorId) {
 }
 
 async function loginUser(email, password) {
-	console.log(email, password);
 	try {
 		const user = await prisma.user.findUnique({
 			where: { email },
 		});
-		return user;
+		if (password === user.password) {
+			return user;
+		} else {
+			return "";
+		}
 	} catch (error) {
 		return {
 			message: "An error occured. Unable to login",
