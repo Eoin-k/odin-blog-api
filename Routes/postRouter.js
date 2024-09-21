@@ -18,4 +18,6 @@ postRouter.post(
 	commentController.createComment,
 );
 
+postRouter.get("/post/:id/comments", commentController.getPostComments);
+
 module.exports = postRouter;

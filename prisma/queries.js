@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
 const allposts = async () => {
@@ -15,12 +16,9 @@ const allposts = async () => {
 
 async function getSinglePost(id) {
 	try {
-		const post = await prisma.post.findMany({
+		const post = await prisma.post.findFirst({
 			where: {
 				id: id,
-			},
-			include: {
-				comments: true,
 			},
 		});
 		return post;
@@ -71,7 +69,9 @@ async function loginUser(email, password) {
 		const user = await prisma.user.findUnique({
 			where: { email },
 		});
-		if (password === user.password) {
+		const match = await bcrypt.compare(password, user.password);
+
+		if (match) {
 			return user;
 		} else {
 			return "";
@@ -102,6 +102,20 @@ async function createComment(content, authorId, id) {
 	}
 }
 
+async function getPostComments(id) {
+	try {
+		const comments = await prisma.comment.findMany({
+			where: { postId: id },
+		});
+		return comments;
+	} catch (error) {
+		return {
+			message: "error getting comments",
+			error: error.message,
+		};
+	}
+}
+
 module.exports = {
 	allposts,
 	createPost,
@@ -109,4 +123,5 @@ module.exports = {
 	loginUser,
 	createComment,
 	getSinglePost,
+	getPostComments,
 };

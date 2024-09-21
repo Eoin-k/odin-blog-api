@@ -33,7 +33,6 @@ getSinglePost = async (req, res) => {
 	try {
 		const post = await db.getSinglePost(id);
 		res.status(200).json(post);
-		console.log(post);
 	} catch (error) {
 		console.error(error);
 	}
