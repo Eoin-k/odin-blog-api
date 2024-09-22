@@ -7,6 +7,9 @@ const allposts = async () => {
 	try {
 		const posts = await prisma.post.findMany({
 			where: { published: true },
+			orderBy: {
+				createdAt: "asc",
+			},
 		});
 		return posts;
 	} catch (err) {
@@ -116,6 +119,25 @@ async function getPostComments(id) {
 	}
 }
 
+async function updatePost(title, content, published, id) {
+	try {
+		const updatedPost = await prisma.post.update({
+			where: { id },
+			data: {
+				title: title,
+				content: content,
+				published: published,
+			},
+		});
+		return updatedPost;
+	} catch (error) {
+		return {
+			message: "error updating post",
+			error: error.message,
+		};
+	}
+}
+
 module.exports = {
 	allposts,
 	createPost,
@@ -124,4 +146,5 @@ module.exports = {
 	createComment,
 	getSinglePost,
 	getPostComments,
+	updatePost,
 };

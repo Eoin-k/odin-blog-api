@@ -17,6 +17,11 @@ postRouter.post(
 	passport.authenticate("jwt", { session: false }),
 	commentController.createComment,
 );
+postRouter.post(
+	"/updatepost/:id",
+	passport.authenticate("jwt", { session: false }),
+	postController.updatePost,
+);
 
 postRouter.get("/post/:id/comments", commentController.getPostComments);
 

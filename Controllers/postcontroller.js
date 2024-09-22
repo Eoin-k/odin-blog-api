@@ -13,18 +13,11 @@ createPost = async (req, res) => {
 	const { title, content, published, authorId } = req.body;
 	console.log(title, content, published, authorId);
 	try {
-		const newPost = await db.createPost(
-			title,
-			content,
-			published,
-			Number(authorId),
-		);
+		const newPost = await db.createPost(title, content, published, Number(authorId));
 		res.status(201).json(newPost);
 		console.log("Post Created");
 	} catch (error) {
-		res
-			.status(500)
-			.json({ message: "that didnt work out", error: error.message });
+		res.status(500).json({ message: "that didnt work out", error: error.message });
 	}
 };
 
@@ -38,8 +31,21 @@ getSinglePost = async (req, res) => {
 	}
 };
 
+updatePost = async (req, res) => {
+	const { title, content, published } = req.body;
+	const id = Number(req.params.id);
+	try {
+		const updatePost = await db.updatePost(title, content, published, id);
+		res.status(201).json(updatePost);
+		console.log("Post has been updated");
+	} catch (error) {
+		res.status(500).json({ message: "Unable to update post", error: error.message });
+	}
+};
+
 module.exports = {
 	getAllPosts,
 	createPost,
 	getSinglePost,
+	updatePost,
 };

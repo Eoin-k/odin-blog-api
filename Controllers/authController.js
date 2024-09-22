@@ -31,7 +31,7 @@ loginUser = async (req, res) => {
 				},
 				process.env.jwtSecret,
 				{
-					expiresIn: "1h",
+					expiresIn: "24h",
 				},
 			);
 			return res.json({
