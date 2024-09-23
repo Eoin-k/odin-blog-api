@@ -17,6 +17,19 @@ const allposts = async () => {
 	}
 };
 
+const adminAllPosts = async () => {
+	try {
+		const posts = await prisma.post.findMany({
+			orderBy: {
+				createdAt: "asc",
+			},
+		});
+		return posts;
+	} catch (err) {
+		console.error(err);
+	}
+};
+
 async function getSinglePost(id) {
 	try {
 		const post = await prisma.post.findFirst({
@@ -138,6 +151,37 @@ async function updatePost(title, content, published, id) {
 	}
 }
 
+async function updatePublishStatus(id, status) {
+	try {
+		const updatedPublishedStatus = await prisma.post.update({
+			where: { id },
+			data: {
+				published: status,
+			},
+		});
+		return updatedPublishedStatus;
+	} catch (error) {
+		return {
+			message: "error updating post published status",
+			error: error.message,
+		};
+	}
+}
+
+async function deletePost(id) {
+	try {
+		const deletedPost = await prisma.post.delete({
+			where: { id: id },
+		});
+		return deletedPost;
+	} catch (error) {
+		return {
+			message: "error trying to delete post",
+			error: error.message,
+		};
+	}
+}
+
 module.exports = {
 	allposts,
 	createPost,
@@ -147,4 +191,7 @@ module.exports = {
 	getSinglePost,
 	getPostComments,
 	updatePost,
+	updatePublishStatus,
+	adminAllPosts,
+	deletePost,
 };

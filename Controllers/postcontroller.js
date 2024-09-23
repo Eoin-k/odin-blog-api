@@ -9,6 +9,15 @@ getAllPosts = async (req, res) => {
 	}
 };
 
+adminAllPosts = async (req, res) => {
+	try {
+		const posts = await db.adminAllPosts();
+		res.json(posts);
+	} catch (error) {
+		console.error(error);
+	}
+};
+
 createPost = async (req, res) => {
 	const { title, content, published, authorId } = req.body;
 	console.log(title, content, published, authorId);
@@ -43,9 +52,37 @@ updatePost = async (req, res) => {
 	}
 };
 
+updatePublishStatus = async (req, res) => {
+	const id = Number(req.params.id);
+	const { status } = req.body;
+	try {
+		const statusUpdate = await db.updatePublishStatus(id, status);
+		res.status(201).json(statusUpdate);
+		console.log("status has been updated");
+	} catch (error) {
+		res
+			.status(500)
+			.json({ message: "unable to update post published status", error: error.message });
+	}
+};
+
+deletePost = async (req, res) => {
+	const id = req.params.id;
+	try {
+		const deletepost = db.deletePost(Number(id));
+		res.status(204).json(deletepost);
+		console.log("post deleted");
+	} catch (error) {
+		res.status(500).json({ message: "unable to delete", error: error.message });
+	}
+};
+
 module.exports = {
 	getAllPosts,
 	createPost,
 	getSinglePost,
 	updatePost,
+	updatePublishStatus,
+	adminAllPosts,
+	deletePost,
 };

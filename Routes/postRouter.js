@@ -6,6 +6,7 @@ const passport = require("passport");
 require("../Passport/passport");
 
 postRouter.get("/", postController.getAllPosts);
+postRouter.get("/admin", postController.adminAllPosts);
 postRouter.get("/post/:id", postController.getSinglePost);
 postRouter.post(
 	"/createpost",
@@ -21,6 +22,17 @@ postRouter.post(
 	"/updatepost/:id",
 	passport.authenticate("jwt", { session: false }),
 	postController.updatePost,
+);
+postRouter.post(
+	"/changepoststatus/:id",
+	passport.authenticate("jwt", { session: false }),
+	postController.updatePublishStatus,
+);
+
+postRouter.post(
+	"/deletepost/:id",
+	passport.authenticate("jwt", { session: false }),
+	postController.deletePost,
 );
 
 postRouter.get("/post/:id/comments", commentController.getPostComments);
