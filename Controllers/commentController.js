@@ -22,7 +22,30 @@ getPostComments = async (req, res) => {
 	}
 };
 
+deleteComment = async (req, res) => {
+	const id = Number(req.params.id);
+	try {
+		const comment = await db.deleteComment(id);
+		res.status(200).json(comment);
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+updateComment = async (req, res) => {
+	const id = Number(req.params.id);
+	const { editedComment } = req.body;
+	try {
+		const commentUpdate = await db.updateComment(id, editedComment);
+		res.status(200).json(commentUpdate);
+	} catch (error) {
+		console.error(error);
+	}
+};
+
 module.exports = {
 	createComment,
 	getPostComments,
+	deleteComment,
+	updateComment,
 };

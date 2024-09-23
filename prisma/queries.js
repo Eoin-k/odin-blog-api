@@ -132,6 +132,37 @@ async function getPostComments(id) {
 	}
 }
 
+async function deleteComment(id) {
+	try {
+		const comment = await prisma.comment.delete({
+			where: { id },
+		});
+		return comment;
+	} catch (error) {
+		return {
+			message: "error deleting comment",
+			error: error.message,
+		};
+	}
+}
+
+async function updateComment(id, content) {
+	try {
+		const updatedComment = await prisma.comment.update({
+			where: { id },
+			data: {
+				content,
+			},
+		});
+		return updatedComment;
+	} catch (error) {
+		return {
+			message: "error updating comment",
+			error: error.message,
+		};
+	}
+}
+
 async function updatePost(title, content, published, id) {
 	try {
 		const updatedPost = await prisma.post.update({
@@ -194,4 +225,6 @@ module.exports = {
 	updatePublishStatus,
 	adminAllPosts,
 	deletePost,
+	deleteComment,
+	updateComment,
 };

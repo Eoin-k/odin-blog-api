@@ -18,6 +18,19 @@ postRouter.post(
 	passport.authenticate("jwt", { session: false }),
 	commentController.createComment,
 );
+
+postRouter.post(
+	"/deletecomment/:id",
+	passport.authenticate("jwt", { session: false }),
+	commentController.deleteComment,
+);
+
+postRouter.post(
+	"/updatecomment/:id",
+	passport.authenticate("jwt", { session: false }),
+	commentController.updateComment,
+);
+
 postRouter.post(
 	"/updatepost/:id",
 	passport.authenticate("jwt", { session: false }),
